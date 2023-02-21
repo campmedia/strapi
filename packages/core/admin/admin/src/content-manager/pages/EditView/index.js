@@ -11,7 +11,7 @@ import { useIntl } from 'react-intl';
 import { ContentLayout, Box, Grid, GridItem, Main, Stack } from '@strapi/design-system';
 
 import { Pencil, Layer } from '@strapi/icons';
-import ReviewWorkflowSelect from 'ee_else_ce/content-manager/pages/EditView/ReviewWorkflowSelect';
+import InformationBox from 'ee_else_ce/content-manager/pages/EditView/InformationBox';
 import { InjectionZone } from '../../../shared/components';
 import permissions from '../../../permissions';
 import DynamicZone from '../../components/DynamicZone';
@@ -21,7 +21,6 @@ import SingleTypeFormWrapper from '../../components/SingleTypeFormWrapper';
 import { getTrad } from '../../utils';
 import useLazyComponents from '../../hooks/useLazyComponents';
 import DraftAndPublishBadge from './DraftAndPublishBadge';
-import Information from './Information';
 import Header from './Header';
 import { getFieldsActionMatchingPermissions } from './utils';
 import DeleteLink from './DeleteLink';
@@ -181,7 +180,7 @@ const EditView = ({ allowedActions, isSingleType, goBack, slug, id, origin, user
                         paddingTop={6}
                         shadow="tableShadow"
                       >
-                        <Information before={<ReviewWorkflowSelect />} />
+                        <InformationBox />
                         <InjectionZone area="contentManager.editView.informations" />
                       </Box>
                       <Box as="aside" aria-labelledby="links">

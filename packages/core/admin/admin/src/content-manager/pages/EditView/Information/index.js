@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 import { useCMEditViewDataManager } from '@strapi/helper-plugin';
 import { Box, Divider, Flex, Stack, Typography } from '@strapi/design-system';
@@ -7,6 +7,25 @@ import { Box, Divider, Flex, Stack, Typography } from '@strapi/design-system';
 import { getTrad } from '../../../utils';
 import getUnits from './utils/getUnits';
 import { getFullName } from '../../../../utils';
+
+const Title = () => {
+  const { formatMessage } = useIntl();
+
+  return (
+    <Stack spacing={2}>
+      <Typography variant="sigma" textColor="neutral600" id="additional-information">
+        {formatMessage({
+          id: getTrad('containers.Edit.information'),
+          defaultMessage: 'Information',
+        })}
+      </Typography>
+
+      <Box>
+        <Divider />
+      </Box>
+    </Stack>
+  );
+};
 
 const KeyValuePair = ({ label, value }) => {
   return (
@@ -20,11 +39,11 @@ const KeyValuePair = ({ label, value }) => {
 };
 
 KeyValuePair.propTypes = {
-  label: propTypes.string.isRequired,
-  value: propTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
-const Information = ({ before }) => {
+const Body = () => {
   const { formatMessage, formatRelativeTime } = useIntl();
   const { initialData, isCreatingEntry } = useCMEditViewDataManager();
   const currentTime = useRef(Date.now());
@@ -49,69 +68,56 @@ const Information = ({ before }) => {
   const created = getFieldInfo('createdAt', 'createdBy');
 
   return (
-    <Stack spacing={6}>
-      <Stack spacing={2}>
-        <Typography variant="sigma" textColor="neutral600" id="additional-information">
-          {formatMessage({
-            id: getTrad('containers.Edit.information'),
-            defaultMessage: 'Information',
+    <Stack spacing={4}>
+      <Stack spacing={2} as="dl">
+        <KeyValuePair
+          label={formatMessage({
+            id: getTrad('containers.Edit.information.created'),
+            defaultMessage: 'Created',
           })}
-        </Typography>
+          value={created.at}
+        />
 
-        <Box>
-          <Divider />
-        </Box>
+        <KeyValuePair
+          label={formatMessage({
+            id: getTrad('containers.Edit.information.by'),
+            defaultMessage: 'By',
+          })}
+          value={created.by}
+        />
       </Stack>
 
-      {before}
+      <Stack spacing={2} as="dl">
+        <KeyValuePair
+          label={formatMessage({
+            id: getTrad('containers.Edit.information.lastUpdate'),
+            defaultMessage: 'Last update',
+          })}
+          value={updated.at}
+        />
 
-      <Stack spacing={4}>
-        <Stack spacing={2} as="dl">
-          <KeyValuePair
-            label={formatMessage({
-              id: getTrad('containers.Edit.information.created'),
-              defaultMessage: 'Created',
-            })}
-            value={created.at}
-          />
-
-          <KeyValuePair
-            label={formatMessage({
-              id: getTrad('containers.Edit.information.by'),
-              defaultMessage: 'By',
-            })}
-            value={created.by}
-          />
-        </Stack>
-
-        <Stack spacing={2} as="dl">
-          <KeyValuePair
-            label={formatMessage({
-              id: getTrad('containers.Edit.information.lastUpdate'),
-              defaultMessage: 'Last update',
-            })}
-            value={updated.at}
-          />
-
-          <KeyValuePair
-            label={formatMessage({
-              id: getTrad('containers.Edit.information.by'),
-              defaultMessage: 'By',
-            })}
-            value={updated.by}
-          />
-        </Stack>
+        <KeyValuePair
+          label={formatMessage({
+            id: getTrad('containers.Edit.information.by'),
+            defaultMessage: 'By',
+          })}
+          value={updated.by}
+        />
       </Stack>
     </Stack>
   );
 };
 
-Information.defaultProps = {
-  before: null,
+const Root = ({ children }) => {
+  return <Stack spacing={6}>{children}</Stack>;
 };
 
-Information.propTypes = {
-  before: propTypes.node,
+Root.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 };
 
-export default Information;
+export default {
+  Root,
+  Title,
+  Body,
+};
